@@ -1,0 +1,19 @@
+version: '3.8'
+
+services:
+  erlang:
+    image: erlang:26.1.2
+  elixir:
+    image: elixir:1.16.3
+    depends_on:
+      - erlang
+  livebook:
+    image: ghcr.io/livebook-dev/livebook
+    ports:
+      - "8080:8080"
+      - "8081:8081"
+    volumes:
+      - ./notebooks:/data
+    pull_policy: always
+    depends_on:
+      - elixir

@@ -2,21 +2,21 @@
 
 ## Understanding Easily
 
-In software development, types are an abstraction to represent some data.
-Types are used to provide some funcionalities and caractestics to a data, for example the Float that's used to represent decimal numbers and List to represent a group of data.
-In Elixir we have some modules to represent the types of data, and they provide for us some default functions like Integer.to_string that we can use to transform an integer into a string or Integer.is_odd to test if the number is odd or even.
+In software development, types are abstractions that represent data. Types provide certain functionalities and characteristics to data. For example, `Float` is used to represent decimal numbers, and `List` is used to represent a group of data.
+
+In Elixir, we have modules that represent data types and provide default functions, such as `Integer.to_string` to transform an integer into a string, and `Integer.is_odd` to test if a number is odd.
 
 ## Elixir commom types
 
 ```elixir
 # Integer and Float
-# Both are used to represent numbers, the difference is while Integer are used to represent and integer number the float are used to represent a decimal number.
+# Both are used to represent numbers. The difference is that `Integer` is used to represent whole numbers, while `Float` is used to represent decimal numbers.
 
 # Some examples of Integer are:
 IO.inspect("The number 1 is an integer? #{is_integer(1)}")
 IO.inspect("The number -1 is an integer? #{is_integer(-1)}")
 
-# We also can have binary (starting with 0b) octa (starting with 0o) or hexadecimal (starting with 0x) representation of a number.
+# We can also have binary (starting with 0b), octal (starting with 0o), or hexadecimal (starting with 0x) representations of numbers.
 # 0b1010 = 10
 IO.inspect("The number 0b1010 is an integer? #{is_integer(0b1010)} and represent #{0b1010}")
 # 0xA = 10
@@ -26,9 +26,9 @@ IO.inspect("The number 0o12 is an integer? #{is_integer(0o12)} and represent #{0
 
 # Some examples of Float are:
 IO.inspect("The number 1 is a float? #{is_float(1)}")
-IO.inspect("The number -1 is a float? #{is_float(0.9)}")
-IO.inspect("The number -1 is a float? #{is_float(-10.3)}")
-IO.inspect("The number -1 is a float? #{is_float(4.0)}")
+IO.inspect("The number 0.9 is a float? #{is_float(0.9)}")
+IO.inspect("The number -10.3 is a float? #{is_float(-10.3)}")
+IO.inspect("The number 4.0 is a float? #{is_float(4.0)}")
 ```
 
 ```elixir
@@ -42,15 +42,15 @@ And they are delimited by double quotes, and encoded in UTF-8."))
 IO.inspect("And we can use the" <> " to concatenate strings")
 
 IO.inspect(
-  "Another possibility that we have when using strings in #{lang_name} is to use # with {} to interpolate"
+  "Another possibility when using strings in #{lang_name} is to use #{} for interpolation"
 )
 ```
 
 ```elixir
 # Charlist
 
-# A charlist represents an list, where every character it's represented by a number.
-inspect(~c"result in a charlsit", charlists: :as_list)
+# A charlist represents a list where every character is represented by a number.
+IO.inspect(~c"result in a charlist", charlists: :as_list)
 ```
 
 ```elixir
@@ -60,7 +60,7 @@ inspect(~c"result in a charlsit", charlists: :as_list)
 IO.inspect("<<1>> is a bitstring? #{is_bitstring(<<1>>)}")
 IO.inspect("<<1:16>> is a bitstring? #{is_bitstring(<<1::16>>)}")
 
-# Binaries it's basicaly a specific case when the number of bits is divisible by eight.
+# Binaries are essentially bitstrings where the number of bits is divisible by eight.
 IO.inspect("<<1::16>> is a binary? #{is_binary(<<1::16>>)}")
 IO.inspect("<<3::4>> is a binary? #{is_binary(<<3::4>>)}")
 IO.inspect("<<3::4>> is a bitstring? #{is_bitstring(<<3::4>>)}")
@@ -69,22 +69,23 @@ IO.inspect("<<3::4>> is a bitstring? #{is_bitstring(<<3::4>>)}")
 ```elixir
 # Atom
 
-# A constant that have as value they own name.
+# A constant whose value is its own name.
 IO.inspect("Examples of atoms: #{:ok} and #{:error} and #{:"this is an atom too"}")
 ```
 
 ```elixir
 # Boolean
 
-"Basically true or false, and the nil (null) it's considered as false in boolean contexts,
-they all are atoms too"
+"Booleans are basically `true` or `false`, and `nil` (null) is considered as `false`
+in boolean contexts.
+They are all atoms too."
 ```
 
 ```elixir
 # [List] and {Tuple}
 
-# A list and a tuple are used to represent collections of some values
-# and they can handle any type of value.
+# Lists and tuples are used to represent collections of values
+# and can contain any type of value.
 
 # Lists can be concatenated using the ++/2:
 IO.inspect([0] ++ [1, 2, 3] ++ [4, 5, 6] ++ [7, 8, 9])
@@ -92,19 +93,18 @@ IO.inspect([0] ++ [1, 2, 3] ++ [4, 5, 6] ++ [7, 8, 9])
 # Lists can be subtracted using the --/2:
 IO.inspect([1, true, 2, false, 3, true] -- [true, false])
 
-IO.inspect("[1, 2, 3] is list? #{is_list([1, 2, 3])}")
-IO.inspect("{1, 2, 3} is list? #{is_list({1, 2, 3})}")
-IO.inspect("{1, 2, 3} is tuple? #{is_tuple({1, 2, 3})}")
-IO.inspect("[1, 2, 3] is tuple? #{is_tuple([1, 2, 3])}")
+IO.inspect("[1, 2, 3] is a list? #{is_list([1, 2, 3])}")
+IO.inspect("{1, 2, 3} is a list? #{is_list({1, 2, 3})}")
+IO.inspect("{1, 2, 3} is a tuple? #{is_tuple({1, 2, 3})}")
+IO.inspect("[1, 2, 3] is a tuple? #{is_tuple([1, 2, 3])}")
 ```
 
-Tuple is a "type of list", but they occupy contiguous spaces in memory, and this means accessing a tuple element by index or getting the tuple size is a fast operation.
+Tuples occupy contiguous memory spaces, making element access by index or size retrieval fast operations.
 
-So what is the difference between then and why/when I should to use List or Tuple?
-While getting size or accessing an element by index is fast whit tuples, with lists do this it's slow.
-On the other hand, manipulate the elements into tuples is expensive because it
-requires creating a new tuple in memory.
-So if the collection will be modyfied use a list it's more interesting.
+So what is the difference and when should you use a List or Tuple?
+While getting size or accessing an element by index is fast with tuples, it is slow with lists.
+On the other hand, manipulating elements in tuples is expensive because it requires creating a new tuple in memory.
+Therefore, if the collection will be modified frequently, using a list is more efficient.
 
 ```elixir
 # A good example about the difference between operations using list and tuples are:
@@ -126,9 +126,9 @@ One example of this in Elixir it's the Map.
 ```elixir
 # Maps
 
-# A Map in Elixir are a collection of key-value where every key should be unique.
+# A Map in Elixir are a collection of key-value where every key is unique.
 # A map is created using the %{} syntax.
-# Maps allow any value as a key
+# Maps allow any value to be used as a key.
 
-%{name: "Alice", age: 30}
+IO.inspect(%{name: "Alice", age: 30})
 ```

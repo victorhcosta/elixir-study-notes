@@ -1,0 +1,136 @@
+# Philosophical stone 1
+
+## The chalenge
+
+Now it's time to get hands-on!
+
+Let's solve a challenge proposal related to problems we tackle here at Stone.
+
+### Requirements
+
+In this challenge, we will develop an application that divides a shopping list among people. For simplicity, we will write a module `Chalenge`, which exposes the function `split`.
+
+The function `Chalenge.split/2` should receive two arguments:
+
+1. A list of tuples that represent `{item name, quantity, price per unit (in cents)}`.
+   Let's assume the input is always valid, without repeating the same item with different prices.
+2. A list of emails (we should ignore duplicate emails).
+
+Given these inputs, the function `Chalenge.split/2` needs to:
+
+1. Calculate the total value (i.e., `quantity * unit price`) of the list;
+2. Perform a **fair** division among the emails (i.e., if there is a remainder, it should be distributed among the people);
+3. Return a `map` of the type `%{email => amount_to_pay}`.
+
+It is important to remember that all values are represented as an `integer`, in cents of the real, and therefore, we cannot use `float` at any point.
+
+In the following livebook, a template with validation tests will be provided.
+
+### References
+
+[1] - Floating Point Math - https://0.30000000000000004.com/
+
+## The implementation
+
+```elixir
+defmodule Chalenge do
+  @moduledoc """
+  This is the module that should be filled
+  with your solution.
+
+  It is allowed to create as many private functions as needed,
+  but the only public function should be the `split/2`
+  function defined as a placeholder below.
+  """
+
+  @spec split(
+          shopping_list :: [
+            {item :: String.t(), quantity :: pos_integer(), unit_price_cents :: pos_integer()}
+          ],
+          emails :: [String.t()]
+        ) :: [%{String.t() => non_neg_integer()}]
+  def split(shopping_list, emails) do
+    emails = Enum.uniq(emails)
+    total = calculate_total(shopping_list)
+
+    emails_quantity = length(emails)
+
+    value_per_person = div(total, emails_quantity)
+    rest = rem(total, emails_quantity)
+
+    to_map(emails, value_per_person)
+    |> distribute(emails, rest)
+  end
+
+  @spec calculate_total(
+          shopping_list :: [
+            {item :: String.t(), quantity :: pos_integer(), unit_price_cents :: pos_integer()}
+          ]
+        ) :: pos_integer()
+  defp calculate_total(shopping_list) do
+    Enum.reduce(
+      shopping_list,
+      0,
+      fn {_, quantity, unit_price_cents}, acc -> quantity * unit_price_cents + acc end
+    )
+  end
+
+  defp to_map(emails, value_per_person),
+    do: Map.new(emails, fn email -> {email, value_per_person} end)
+
+  defp distribute(map, _emails, 0), do: map
+
+  defp distribute(map, [email | tail], amount) do
+    value = map[email]
+
+    modified_map = Map.put(map, email, value + 1)
+
+    distribute(modified_map, tail ++ [email], amount - 1)
+  end
+end
+```
+
+```elixir
+# Aqui faremos alguns testes básicos
+import ExUnit.Assertions
+
+# Lista de emails com valores repetidos
+emails = ~w(
+  paulo@email.com
+  valente@email.com
+  teste@email.com
+  valente@email.com
+  paulo@email.com
+  valente@email.com
+)
+
+# Primeiro, vamos validar os casos em que o valor total é menor ou igual ao número de emails
+assert %{"paulo@email.com" => 1, "valente@email.com" => 0, "teste@email.com" => 0} ==
+         Chalenge.split([{"banana", 1, 1}, {"maçã", 0, 10}], emails)
+
+assert %{"paulo@email.com" => 1, "valente@email.com" => 1, "teste@email.com" => 0} ==
+         Chalenge.split([{"banana", 2, 1}, {"maçã", 0, 10}], emails)
+
+assert %{"paulo@email.com" => 1, "valente@email.com" => 1, "teste@email.com" => 1} ==
+         Chalenge.split([{"banana", 1, 1}, {"maçã", 1, 2}], emails)
+
+# Caso em que há mais de um centavo de resto
+assert %{"paulo@email.com" => 2, "valente@email.com" => 2, "teste@email.com" => 1} ==
+         Chalenge.split([{"banana", 1, 1}, {"maçã", 1, 2}, {"uva", 2, 1}], emails)
+
+# Teste de erro de arredondamento
+
+assert %{
+         "1@email.com" => 1,
+         "2@email.com" => 1,
+         "3@email.com" => 1,
+         "4@email.com" => 1,
+         "5@email.com" => 1,
+         "6@email.com" => 1,
+         "7@email.com" => 1,
+         "8@email.com" => 0,
+         "9@email.com" => 0,
+         "10@email.com" => 0,
+         "11@email.com" => 0
+       } == Chalenge.split([{"banana", 7, 1}], Enum.map(1..11, &"#{&1}@email.com"))
+```

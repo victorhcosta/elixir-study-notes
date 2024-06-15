@@ -91,10 +91,10 @@ end
 ```
 
 ```elixir
-# Aqui faremos alguns testes básicos
+# Here, we will make some basic tests
 import ExUnit.Assertions
 
-# Lista de emails com valores repetidos
+# Email list with repeated values
 emails = ~w(
   paulo@email.com
   valente@email.com
@@ -104,7 +104,7 @@ emails = ~w(
   valente@email.com
 )
 
-# Primeiro, vamos validar os casos em que o valor total é menor ou igual ao número de emails
+# First, we will validate cases when the total value is equal or less to the number of e-mails
 assert %{"paulo@email.com" => 1, "valente@email.com" => 0, "teste@email.com" => 0} ==
          Chalenge.split([{"banana", 1, 1}, {"maçã", 0, 10}], emails)
 
@@ -114,12 +114,11 @@ assert %{"paulo@email.com" => 1, "valente@email.com" => 1, "teste@email.com" => 
 assert %{"paulo@email.com" => 1, "valente@email.com" => 1, "teste@email.com" => 1} ==
          Chalenge.split([{"banana", 1, 1}, {"maçã", 1, 2}], emails)
 
-# Caso em que há mais de um centavo de resto
+# A case when rest more than one cent
 assert %{"paulo@email.com" => 2, "valente@email.com" => 2, "teste@email.com" => 1} ==
          Chalenge.split([{"banana", 1, 1}, {"maçã", 1, 2}, {"uva", 2, 1}], emails)
 
-# Teste de erro de arredondamento
-
+# Testing rounding error
 assert %{
          "1@email.com" => 1,
          "2@email.com" => 1,

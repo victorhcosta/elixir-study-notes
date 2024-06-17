@@ -1,0 +1,71 @@
+# Immutability
+
+## Understanding easily
+
+A good analogy to immutability is the process of sculpting. Once the sculpture has been finished, we can't change its form without carving another piece.
+
+## What's immutability
+
+Immutability means that once a variable has been created, its value can't be changed.
+
+Instead of changing the existing value, the code will allocate a new space in memory and assign this to the variable without touching the past value.
+
+<!-- livebook:{"break_markdown":true} -->
+
+Reassigning variables:
+
+```elixir
+x = 1
+y = x + 1
+# x remains 1, y is 2
+```
+
+Lists:
+
+When adding or removing elements from a list, a new list will be created
+
+```elixir
+list = [1, 2, 3]
+new_list = [0 | list]
+# list remains [1, 2, 3], new_list is [0, 1, 2, 3]
+```
+
+Tuples:
+
+When modifying a tuple, we will receive a new tuple.
+
+```elixir
+tuple = {1, 2, 3}
+new_tuple = put_elem(tuple, 1, 4)
+# tuple remains {1, 2, 3}, new_tuple is {1, 4, 3}
+```
+
+Maps:
+
+When modifying a map, we will recive a new map.
+
+```elixir
+map = %{a: 1, b: 2}
+new_map = Map.put(map, :c, 3)
+# map remains %{a: 1, b: 2}, new_map is %{a: 1, b: 2, c: 3}
+```
+
+## Advantages  of immutability
+
+1. **Safe Concurrency:** It is easier to use concurrency because there is no risk of different processes changing the same variable simultaneously.
+
+2. **Predictability:** Without unexpected changes in state, the code is easier to understand and more predictable.
+
+3. **Easy to Debug:** With immutable data, tracking and understanding data flow is simpler, which makes it easier to debug and test.
+
+4. **Pure Functions:** Immutability favors creating pure functions.
+
+For a deeper explanation about pure functions, you can read the [Functions](./functions.livemd) notebook.
+
+## Working with immutable data
+
+To make it simpler and more efficient to work with immutable data, Elixir provides a lot of structures and functions that return new values instead of changing the existing ones.
+
+### Transform with `Enum` and `Stream`
+
+Functions in the modules `Enum` and `Stream` are great for efficiently transforming immutable collections, and each will return a new collection.

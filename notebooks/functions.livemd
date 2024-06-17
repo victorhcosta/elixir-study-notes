@@ -1,0 +1,134 @@
+# Functions
+
+## Understanding easily
+
+We can think of functions like cooking recipes. Each recipe (function) describes how to prepare the food, with a list of ingredients (parameters), and the step-by-step instructions (function body).
+
+And just as you follow a recipe to cook, you call a function to perform a task in the application.
+
+## Defining functions
+
+In Elixir, functions can be private or public.
+
+To define a public function, use `def`, and for private functions, use `defp`.
+
+* Public function: can be called outside of their module.
+* Private function: can only be called/seen inside the module.
+
+```elixir
+defmodule Math do
+  # Public function
+  def add(a, b) do
+    a + b
+  end
+
+  # Private function
+  defp subtract(a, b) do
+    a - b
+  end
+end
+
+# Calling function
+# Works
+Math.add(1, 2)
+# Error: private function
+Math.subtract(3, 1)
+```
+
+## Arity
+
+Function arity is the number of arguments that they accept. In Elixir, functions with the same name but different arity are considered different.
+
+Note: a function with the same number of arguments but a specific value is also considered different in Elixir. For example, the `add` function from the previous example, if instead of `b` they have a declaration that accepts `a` and `10` and another with a declaration with arguments `a`, `b`, and `c` will not be considered as the same function, even if inside the same module, but will be considered three different functions. However, when using a specific value as an argument, this should be declared first, then the function that doesn't have this, like in the example below.
+
+```elixir
+defmodule Math do
+  def multiply(a, 2) do
+    IO.inspect("calling multiply with a and 2 as arg")
+    a * 2
+  end
+
+  def multiply(a, b) do
+    IO.inspect("calling multiply with a and b as arg")
+    a * b
+  end
+
+  def multiply(a, b, c) do
+    IO.inspect("calling multiply with a, b, and c as arg")
+    a * b * c
+  end
+end
+
+IO.inspect(Math.multiply(5, 3))
+IO.inspect(Math.multiply(5, 2))
+IO.inspect(Math.multiply(5, 3, 8))
+```
+
+## Anonymous functions
+
+Elixir supports named functions like `inspect` from the `IO` module, but it also supports anonymous functions (also known as lambda).
+
+They are useful for quick and simple operations.
+
+```elixir
+add = fn a, b -> a + b end
+# Result: 3
+add.(1, 2)
+
+# Alternative syntax using capture operator
+multiply = &(&1 * &2)
+# Result: 6
+multiply.(2, 3)
+```
+
+## Pattern Mattching in functions
+
+Elixir allows pattern matching in function parameters, allowing you to define multiple functions with different clauses for the same function.
+
+```elixir
+defmodule Greeter do
+  def greet(:morning), do: "Good morning!"
+  def greet(:afternoon), do: "Good afternoon!"
+  def greet(:evening), do: "Good evening!"
+end
+
+# "Good morning!"
+Greeter.greet(:morning)
+# "Good evening!"
+Greeter.greet(:evening)
+```
+
+## Guard functions
+
+Guard functions allow adding extra conditions to the function clauses.
+
+```elixir
+defmodule Math do
+  def is_even(number) when rem(number, 2) == 0 do
+    true
+  end
+
+  def is_even(_number) do
+    false
+  end
+end
+
+# true
+Math.is_even(4)
+# false
+Math.is_even(5)
+```
+
+### Common Guards
+
+1. `when is_integer(number)` - Check if number is an integer.
+2. `when is_list(collection)` - Check if collection is a list.
+3. `when is_atom(value)` - Check if value is an atom.
+4. `when is_map(data)` - Check if data is a map.
+5. `when is_binary(data)` - Check if data is binary.
+6. `when is_function(fun)` - Check if value is a function.
+7. `when rem(number, divisor) == 0` - Check if a number is divisible by another.
+8. `when not(condition)` - Check if the condition isn't true.
+9. `when is_boolean(value)` - Check if value is boolean.
+10. `when is_nil(value)` - Check if value is null (nil).
+11. `when is_tuple(value)` - Check if value is a tuple.

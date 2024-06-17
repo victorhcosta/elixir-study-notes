@@ -1,0 +1,113 @@
+# Variables
+
+## Understanding easily
+
+We can think of variables as tags used to identify different bottles (values).
+
+Once you tag a bottle, you can't change its content. To use new content, you will use a different bottle with another tag.
+
+## Declaration and assignment
+
+In Elixir, you declare and assign values to variables using the `=` operator.
+
+Differently from other languages, this operation is actually pattern matching.
+
+```elixir
+number = 10
+planet = "Earth"
+```
+
+## Immutability
+
+In Elixir, variables are immutable, which means that once a value is assigned, it can't be changed.
+
+However, it's possible to reassign a variable to a new value, creating a new "tag".
+
+For a deeper explanation about immutability, you can read the [Immutability](./immutability.livemd) notebook.
+
+```elixir
+x = 1
+x = x + 1
+# Now the value of x is 2, but 1 hasn't changed, just a new value has been assigned to x.
+```
+
+## Pattern match
+
+Pattern matching is a powerful Elixir characteristic, and it is extensively used with variables.
+
+With pattern matching, it's possible to extract values from complex data structures.
+
+For a deeper explanation about pattern matching, you can read the Pattern Matching notebook.
+
+```elixir
+# Tuples
+{a, b, c} = {1, 2, 3}
+# a is 1, b is 2, c is 3
+
+# Lists
+[h | t] = [1, 2, 3]
+# h is 1, t is [2, 3]
+
+# Maps
+%{key: value} = %{key: "value"}
+
+# value is "value"
+```
+
+## Pinning Variables
+
+To fix the value of a variable, we can use the `^` operator to ensure the used value is the existing one.
+
+```elixir
+x = 1
+# Works
+^x = 1
+# Throws an error
+^x = 2
+```
+
+## Variables scope
+
+Elixir variables have lexical scope, which means their scope is determined by the code structure.
+
+Variables defined inside a function can't be accessed outside of it.
+
+```elixir
+defmodule Example do
+  def my_function do
+    x = 42
+    IO.puts(x)
+  end
+end
+
+# output: 42
+Example.my_function()
+# IO.puts x
+# Throws an error as x is not in scope here
+```
+
+## Practice example
+
+Let's see a practical example combining some of the Elixir variables' characteristics.
+
+```elixir
+defmodule Example do
+  def process_data(data) do
+    {name, age} = data
+
+    new_age = age + 1
+
+    IO.puts("Name: #{name}, Age: #{age}, Next Year: #{new_age}")
+  end
+end
+
+data = {"Alice", 30}
+Example.process_data(data)
+# Output: Name: Alice, Age: 30, Next Year: 31
+```
+
+In this example:
+
+* We extracted `name` and `age` from a tuple using pattern matching.
+* Calculated `new_age` by incrementing age.
+* Printed the values.

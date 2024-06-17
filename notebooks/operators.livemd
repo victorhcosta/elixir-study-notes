@@ -1,0 +1,169 @@
+# Operators
+
+## Understanding easily
+
+We can think of operators as tools in a toolbox, each tool has a specific purpose and use. And using them properly will make everything work right.
+
+If we see the code as a line production, the `pipe operator` will be responsible for moving the result of each step to the next until the product is finished and ready for sale/delivery.
+
+## Aritmetic operators
+
+Os operadores aritméticos em Elixir são similares aos de outras linguagens de programação e incluem:
+
+The arithmetic operators in Elixir are similar to those in other programming languages and include.
+
+* `+` (addition)
+* `-` (subtraction)
+* `*` (multiplication)
+* `/` (division)
+
+```elixir
+# Result: 5
+2 + 3
+# Result: 3
+7 - 4
+# Result: 10
+5 * 2
+# Result: 5.0
+10 / 2
+
+# Result: 5
+div(10, 2)
+```
+
+Note: in Elixir the division operator `/` every returns a float, even when the result is an integer, for example, `10 / 2` to receive an integer use the div function from Kernel (which means that's not necessary import any module).
+
+## Booleans operators
+
+Boolean operators are used to deal with true or false values.
+
+* `and`: return `true` just if each operand is true.
+* `or`: return `true` if at least one of the operands is true.
+* `not`: return the opposite of the boolean value.
+
+```elixir
+# Result: false
+true and false
+# Result: true
+true or false
+# Result: false
+not true
+```
+
+To evaluate values that aren't booleans, we use:
+
+* `&&` instead of `and`.
+* `||` instead of `or`.
+* `!` instead of `not`.
+
+Note:
+
+* a value is `truthy` when it is neither `false` nor `nil`.
+* a value is `falsy` when it is either `false` or `nil`.
+
+```elixir
+# Result: true
+1 && true
+# Result: true
+nil || true
+# Result: false
+!true
+```
+
+## Comparison operators
+
+Comparison operators are used to compare values.
+
+* `==`: equality
+* `===`: exact equality
+* `!=`: inequality
+* `!==`: exact inequality
+* `>`: Greater than
+* `>=`: Greater than or equal
+* `<`: Less than
+* `<=`: Less than or equal
+
+Note:
+
+* `==` and `!=` compare just the value.
+* `===` and `!==` compare the value and the type.
+
+```elixir
+# Result: true
+10 == 10.0
+# Result: false
+10 === 10.0
+# Result: true
+10 != 5
+# Result: true
+10 !== 10.0
+# Result: true
+5 < 10
+# Result: true
+10 >= 5
+```
+
+## Concatenation and cons operators
+
+* `<>`: string concatenation
+* `++`: list concatenation
+* `--`: list subtraction
+* `|`: cons operator, add an element in the start of the list
+
+```elixir
+# Result: "Hello, world!"
+"Hello, " <> "world!"
+
+# Result: [1, 2, 3, 4]
+[1, 2] ++ [3, 4]
+# Result: [1, 3]
+[1, 2, 3, 4] -- [2, 4]
+
+# Result: [1, 2, 3]
+1 | [2, 3]
+```
+
+## Pipe operators
+
+The pipe operator (`|>`) allows chain function calls clearly. Passing the function result as an argument to the next.
+
+```elixir
+"hello world"
+|> String.upcase()
+|> String.split()
+
+# Result: ["HELLO", "WORLD"]
+```
+
+## Capture operators
+
+The capture operator (`&`) is used to create anonymous functions concisely.
+
+```elixir
+add = &(&1 + &2)
+# Result: 3
+add.(1, 2)
+
+square = &(&1 * &1)
+# Result: 16
+square.(4)
+```
+
+## Match operators
+
+The match operator (`=`) is used to assign values and make pattern matching.
+
+```elixir
+# assign
+x = 1
+# Pattern matching successful
+1 = x
+
+# Example of pattern matching with tuples
+# Atribui 1 a 'a' e 2 a 'b'
+{a, b} = {1, 2}
+
+# Example of pattern matching with lists
+# 'h' é 1, 't' é [2, 3]
+[h | t] = [1, 2, 3]
+```

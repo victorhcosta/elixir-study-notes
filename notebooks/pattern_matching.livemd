@@ -1,0 +1,147 @@
+# Pattern matching
+
+## Understanding easily
+
+Think about `pattern matching` like a game or toy, where you have a lot of objects that have different forms, and the goal is to put then in the locale with the same form of each object.
+
+## Introduction of Pattern matching
+
+Pattern matching is used to compare values and extract data from complex structures.
+In Elixir this is done with the operator `=`.
+
+```elixir
+# Simple assing
+x = 1
+# x is 1
+
+# Matching in tuples
+{a, b} = {1, 2}
+# a is 1, b is 2
+
+# Matching in lists
+[h | t] = [1, 2, 3]
+# h is 1, t is [2, 3]
+```
+
+## Common uses of Pattern matching
+
+1. Assingning variables.
+2. Extract data from structures.
+3. Functions with clauses.
+4. Combining `case` and `cond`.
+
+```elixir
+# 1
+x = 1
+y = 2
+
+# 2
+{a, b, c} = {1, 2, 3}
+# a é 1, b é 2, c é 3
+
+[h | t] = [1, 2, 3]
+# h é 1, t é [2, 3]
+
+%{name: name, age: age} = %{name: "Alice", age: 30}
+# name é "Alice", age é 30
+
+# 3
+defmodule Math do
+  def add({a, b}) do
+    a + b
+  end
+
+  def add(a, b) do
+    a + b
+  end
+end
+
+# Resultado: 3
+Math.add({1, 2})
+# Resultado: 3
+Math.add(1, 2)
+
+# 4
+case {1, 2, 3} do
+  {1, x, 3} -> "Matched: x = #{x}"
+  _ -> "No match"
+end
+
+# Resultado: "Matched: x = 2"
+
+cond do
+  1 + 1 == 3 -> "This is never true"
+  2 * 2 == 4 -> "This is true"
+  true -> "This is always true"
+end
+
+# Resultado: "This is true"
+```
+
+## Pinning operator
+
+The pinning operator `^` is used to fix the value of a variable in a pattern matching. And it helps to ensure the variable has a specific value.
+
+```elixir
+x = 1
+# Works
+^x = 1
+# Throw an error
+^x = 2
+```
+
+## Pattern matching in functions
+
+It is possible to define different clauses to a function using pattern matching for different types of input.
+
+```elixir
+defmodule Greeter do
+  def greet(%{name: name}) do
+    "Hello, #{name}!"
+  end
+
+  def greet(name) when is_binary(name) do
+    "Hello, #{name}!"
+  end
+end
+
+# Result: "Hello, Alice!"
+Greeter.greet(%{name: "Alice"})
+# Result: "Hello, Bob!"
+Greeter.greet("Bob")
+```
+
+## Practice example
+
+Let's see a practical example of pattern matching used to process a command list.
+
+```elixir
+defmodule CommandProcessor do
+  def process([{:add, x, y} | tail]) do
+    IO.puts("Adding #{x} and #{y}: #{x + y}")
+    process(tail)
+  end
+
+  def process([{:subtract, x, y} | tail]) do
+    IO.puts("Subtracting #{y} from #{x}: #{x - y}")
+    process(tail)
+  end
+
+  def process([]) do
+    IO.puts("No more commands")
+  end
+end
+
+commands = [{:add, 1, 2}, {:subtract, 5, 3}, {:add, 10, 20}]
+CommandProcessor.process(commands)
+# Output:
+# Adding 1 and 2: 3
+# Subtracting 3 from 5: 2
+# Adding 10 and 20: 30
+# No more commands
+```
+
+In this example:
+
+* We used `pattern matching` to identify the command type and extract associated values.
+* Processed the command list recursively until there were no more commands to process.

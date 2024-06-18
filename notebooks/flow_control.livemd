@@ -1,0 +1,153 @@
+# Flow control
+
+## Understanding easily
+
+Control structures are a way of determining what should be done next.
+
+We can take the movement between two locations as an example. Depending on the distance between these locations, the journey could be done by walking if they are close, and by car if they are far away.
+Below, we will have some examples of different forms of flow control.
+
+In Elixir, we can use the following to control certain things:
+
+1. `if`: executes the block if the condition is true.
+
+   ```Elixir
+   if condition do
+   # Block of code to execute if the condition is true
+   end
+   ```
+
+2. `if else`: if the condition isn't true, then enter the else block.
+
+   ```Elixir
+   if condition do
+   # Block of code to execute if the condition is true
+   else
+   # Block of code to execute if the condition is false
+   end
+   ```
+
+3. `unless`: is the opposite of `if`; the block is only executed if the condition is false.
+
+   ```Elixir
+   unless condition do
+   # Block of code to execute if the condition is false
+   else
+   # Block of code to execute if the condition is true
+   end
+   ```
+
+4. `cond`: used when there are multiple conditions to be evaluated, similar to `if() {} else if() {} else` in other programming languages.
+
+   ```Elixir
+   cond do
+   condition1 ->
+    # Block of code to execute if condition1 is true
+   condition2 ->
+    # Block of code to execute if condition2 is true
+   true ->
+    # Block of code to execute if neither of the previous conditions is true
+   end
+   ```
+
+5. `case`: used to match a value against multiple patterns.
+
+   ```Elixir
+   case expression do
+   pattern1 ->
+    # Block of code to execute if the expression matches pattern1
+   pattern2 ->
+    # Block of code to execute if the expression matches pattern2
+   _ ->
+    # Block of code to execute if the expression does not match any previous pattern
+   end
+   ```
+
+6. `with`: a powerful macro for chaining multiple pattern matchings, making it easy to read and write with multiple operations.
+
+   ```Elixir
+   with pattern1 <- expression1,
+     pattern2 <- expression2 do
+   # Block of code to execute if all matches happen with success
+   else
+   error_pattern ->
+    # Block of code to execute if any matches fail
+   end
+   ```
+
+## Flow control structures
+
+```elixir
+# if
+is_near = true
+
+if is_near do
+  IO.inspect("Go walking looks like a good idea!")
+end
+
+# if else
+is_near = false
+
+if is_near do
+  IO.inspect("Go walking looks like a good idea!")
+else
+  IO.inspect("Go with a car better idea!")
+end
+
+# unless
+age = 15
+
+unless age >= 18 do
+  IO.inspect("Too young to travel alone!")
+else
+  IO.inspect("You can travel alone!")
+end
+
+# cond
+number = 1
+
+cond do
+  number <= 9 ->
+    IO.inspect("the number is less than ten")
+
+  number == 10 ->
+    IO.inspect("the number is ten")
+
+  true ->
+    IO.inspect("the number is greater than ten")
+end
+
+score = 85
+
+grade =
+  cond do
+    score >= 90 -> "A"
+    score >= 80 -> "B"
+    score >= 70 -> "C"
+    true -> "F"
+  end
+
+IO.puts("Your grade is: #{grade}")
+
+# case
+fruit = "apple"
+
+case fruit do
+  "apple" -> IO.puts("It's an apple.")
+  "banana" -> IO.puts("It's a banana.")
+  _ -> IO.puts("Unknown fruit.")
+end
+
+# with
+user = %{name: "Alice", age: 20}
+
+message =
+  with %{name: name} <- user,
+       true <- String.length(name) > 0 do
+    "User is valid."
+  else
+    _ -> "Invalid user."
+  end
+
+IO.puts(message)
+```
